@@ -4,6 +4,6 @@ maintainer_email 'ele.mooney@socrata.com'
 license          'All rights reserved'
 description      'Installs/Configures chef-metaflows'
 long_description 'Installs/Configures chef-metaflows'
-version          '0.1.1'
+version          '0.1.3'
 
 depends 'runit'
