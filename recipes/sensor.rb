@@ -1,4 +1,5 @@
 # install and run the metaflows sensor/collector
+# the software currently only runs on centos
 
 if node['platform'] == 'centos'
   bash 'install metaflows sensor' do 
