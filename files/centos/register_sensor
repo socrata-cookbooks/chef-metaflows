@@ -1,0 +1,17 @@
+#!/usr/bin/expect
+set timeout 180
+spawn sudo /nsm/etc/mss.sh start
+expect "selection: "
+send "2 \r"
+expect "email:"
+send "metaflows@socrata.com\r"
+expect "password: "
+send "$env(METAFLOWS_LOGIN)\r"
+expect "please enter your first name (letters only please): "
+send "chef-metaflows\r"
+expect "please enter a name for this instance"
+send "\r"
+expect "please enter a group name for this instance, this should be unique to your organisation (default: socrata.com): "
+send "$env(CHEF_ENV)\r"
+expect "Starting mss"
+expect eof 
