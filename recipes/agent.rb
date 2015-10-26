@@ -1,7 +1,7 @@
 #
 # Cookbook Name:: chef-metaflows
-# Recipe:: default
-# cookbook to distribute the metaflows agent
+# Recipe:: agent
+# recipe to distribute the metaflows agent
 # 
 
 include_recipe 'runit'

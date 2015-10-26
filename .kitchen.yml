@@ -1,16 +1,42 @@
 ---
 driver:
-  name: vagrant
+  name: docker
 
 provisioner:
   name: chef_solo
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'] %>
+  solo.rb:
+    environment: <%= ENV['AWS_ENVIRONMENT'] %>
 
 platforms:
-  - name: ubuntu-12.04
+  - name: ubuntu-14.04
+    driver:
+      image_id: <% ENV['AMI_ID' %>
+    transport:
+      username: ubuntu
   - name: centos-6.4
+    driver:
+      name: ec2
+      region: <%= ENV['AWS_REGION'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY'] %>
+      instance_type: m2.xlarge
+      subnet_id: <%= ENV['SUBNET_ID'] %>
+      security_group_ids: [ <%= ENV['SECURITY_GROUP_ID'] %> ]
+      image_id: <%= ENV['METAFLOWS_AMI_ID'] %>
+      iam_profile_name: <%= ENV['IAM_ROLE'] %>
+      tags: 
+        Name: metaflows-kitchen
+    transport:
+      username: metaflows
+      ssh_key: <%= ENV['PATH_TO_SSH_KEY'] %>
 
 suites:
-  - name: default
+  - name: sensor
+    user: metaflows
     run_list:
-      - recipe[chef-metaflows::default]
-    attributes:
+      - recipe[chef-metaflows::sensor]
+
+  - name: agent
+    run_list:
+      - recipe[chef-metaflows::agent]
+    attributes: { sensor_ip: <%= ENV['SENSOR_IP'] %> }
