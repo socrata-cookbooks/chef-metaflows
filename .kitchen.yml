@@ -4,31 +4,31 @@ driver:
 
 provisioner:
   name: chef_solo
-  require_chef_omnibus: 11.16.4
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'] %>
   solo.rb:
-    environment: aws-us-west-2-staging
+    environment: <%= ENV['AWS_ENVIRONMENT'] %>
 
 platforms:
   - name: ubuntu-14.04
     driver:
-      image_id: ami-3be3f20b
+      image_id: <% ENV['AMI_ID' %>
     transport:
       username: ubuntu
   - name: centos-6.4
     driver:
       name: ec2
-      region: us-west-2
-      aws_ssh_key_id: shared-bootstrap
+      region: <%= ENV['AWS_REGION'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY'] %>
       instance_type: m2.xlarge
-      subnet_id: subnet-3050df55
-      security_group_ids: ["sg-f8ae169c"]
-      image_id: ami-ccb753ff
-      iam_profile_name: staging-metaflows-sensor-InstanceProfileObject-R8ZQ7XPIFWJS
+      subnet_id: <%= ENV['SUBNET_ID'] %>
+      security_group_ids: [ <%= ENV['SECURITY_GROUP_ID'] %> ]
+      image_id: <%= ENV['METAFLOWS_AMI_ID'] %>
+      iam_profile_name: <%= ENV['IAM_ROLE'] %>
       tags: 
         Name: metaflows-kitchen
     transport:
       username: metaflows
-      ssh_key: ~/.ssh/shared-bootstrap
+      ssh_key: <%= ENV['PATH_TO_SSH_KEY'] %>
 
 suites:
   - name: sensor
@@ -39,4 +39,4 @@ suites:
   - name: agent
     run_list:
       - recipe[chef-metaflows::agent]
-    attributes: { sensor_ip: "10.110.38.249" }
+    attributes: { sensor_ip: <%= ENV['SENSOR_IP'] %> }

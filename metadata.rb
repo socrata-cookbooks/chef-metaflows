@@ -6,5 +6,8 @@ description      'Installs/Configures chef-metaflows'
 long_description 'Installs/Configures chef-metaflows'
 version          '0.2.8'
 
+supports 'ubuntu'
+supports 'centos'
+
 depends 'runit'
 depends 'socrata_configuration'

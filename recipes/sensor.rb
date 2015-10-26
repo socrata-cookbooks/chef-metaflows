@@ -58,4 +58,6 @@ if node['platform'] == 'centos'
   runit_service 'mss' do
     action :enable
   end
+else 
+  warn 'The sensor recipe only works on the CentOS Metaflows AMI from the AWS Marketplace.'
 end
