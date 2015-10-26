@@ -35,7 +35,7 @@ if node['platform'] == 'centos'
     /etc/chef/register_sensor
     EOC
     action :nothing
-    environment({ 'CHEF_ENV' => node.chef_environment })
+    environment( 'CHEF_ENV' => node.chef_environment )
     notifies :restart, 'runit_service[mss]', :delayed
     only_if { sensor_status.include?("export sid=0\n") }
   end
