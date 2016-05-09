@@ -5,7 +5,7 @@ if node['platform'] == 'centos'
   package 'expect'
   package 'expectk'
 
-  cookbook_file "#{node['metaflows']['bin_dir']/register_sensor" do
+  cookbook_file "#{node['metaflows']['bin_dir']}/register_sensor" do
     source 'register_sensor'
     owner 'metaflows'
     group 'metaflows'
