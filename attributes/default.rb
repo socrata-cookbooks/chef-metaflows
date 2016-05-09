@@ -4,3 +4,4 @@ default['metaflows']['metaflows_clortho_file']
 
 default['metaflows']['config_file'] = '/nsm/etc/settings.sh'
 default['metaflows']['config'] = {}
+default['metaflows']['bin_dir'] = '/usr/local/bin'

@@ -5,7 +5,7 @@ if node['platform'] == 'centos'
   package 'expect'
   package 'expectk'
 
-  cookbook_file "/etc/chef/register_sensor" do
+  cookbook_file "#{node['metaflows']['bin_dir']/register_sensor" do
     source 'register_sensor'
     owner 'metaflows'
     group 'metaflows'
@@ -32,7 +32,7 @@ if node['platform'] == 'centos'
     sed -i '/Defaults    requiretty/c\# Defaults    requiretty' /etc/sudoers
     sed -i '/Defaults   !visiblepw/c\# Defaults   !visiblepw' /etc/sudoers
     source /dev/shm/#{node['metaflows']['metaflows_clortho_file']}
-    /etc/chef/register_sensor
+    #{node['metaflows']['bin_dir']}/register_sensor
     EOC
     action :nothing
     environment( 'CHEF_ENV' => node.chef_environment )
