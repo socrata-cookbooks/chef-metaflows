@@ -1,0 +1,60 @@
+#!/bin/bash
+if [ $(whoami) != "root" ]; then
+    echo 'delete script must be run as root. Exiting'
+    exit
+fi
+
+if [ "$1" == "stop" ]; then
+
+    source /nsm/etc/settings.sh
+
+    if [ "$sid" == 0 ] || [ -z ${sid+x} ]; then
+	    echo "This sensor is not configured, unable to delete"
+	    exit
+    fi
+
+    if [ ! -e /tmp/md5pass ]; then
+	    wget https://nsm.metaflows.com/plugins-2.5_64/md5pass -O /tmp/md5pass
+    fi
+
+    chmod +x /tmp/md5pass
+
+    while [ "$loggedin" != 1 ]; do
+        email=<%= @email %>
+        password=<%= @pasword %>
+        user=`echo $email| cut -f1 -d\@`
+        dom=`echo $email| cut -f2 -d\@`
+        SALT=`echo -n "The seven words you can't say on television: ... $password" |md5sum`
+        ENCR=`/tmp/md5pass $password $SALT|head -1`
+        wget "https://nsm.metaflows.com/perl/getconf.pl?action=getsensors&p=$ENCR&m=$email" -O sensors.tmp -q 
+        res1=$?
+        res2=`head -1 sensors.tmp | awk '{print $1}'`;
+        rm -f sensors.tmp
+        if [ "$res2" != "none" ] && [ "$res1" == 0 ]; then
+            echo "user information validated"
+            loggedin=1
+            SALT=`echo -n "The seven words you can't say on television: ... $password" |md5sum`
+            ENCR=`/tmp/md5pass $password $SALT|head -1`
+            PIPV4=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
+            rm /tmp/mfd.reg 2> /dev/null
+            echo type: deletesensor >> /tmp/mfd.reg
+            echo email: $email >> /tmp/mfd.reg
+            echo password-hash: $ENCR >> /tmp/mfd.reg
+            echo sid: $sid >> /tmp/mfd.reg
+            echo public-ip: $PIPV4 >> /tmp/mfd.reg
+            echo "Stopping and resetting sensor configuration"
+            /nsm/etc/mss.sh stop
+            echo "deleteing instance... this may take a few moments"
+            DELETESENSOR=`curl -s --form upload="@/tmp/mfd.reg" "https://nsm.metaflows.com/perl/getconf.pl?action=postaws"`
+            echo $DELETESENSOR
+            rm /tmp/mfd.reg
+        else
+            echo $res1
+            echo $res2
+            echo "Login failed, retrying..."
+            sleep 10
+        fi
+    done
+else
+    exit 0
+fi
