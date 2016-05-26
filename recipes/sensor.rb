@@ -61,14 +61,21 @@ if node['platform'] == 'centos'
 
   creds = data_bag_item('credentials', 'metaflows')
 
-  template '/etc/rc0.d/K01delete-metaflows-sensor' do
+  template '/etc/init.d/delete-metaflows-sensor' do
     source 'deregister-node.erb'
     owner 'root'
     group 'root'
     mode 00755
     variables password: creds['password'],
               email: creds['email']
+    notifies :run, 'execute[link-metaflows-sensor-delete]', :immediately
   end
+
+  execute 'link-metaflows-sensor-delete' do
+    command 'update-rc.d -f delete-metaflows-sensor stop 01 0 . start 01 1 2 3 4 5 6 .'
+    action: nothing
+  end
+  
 else 
   warn 'The sensor recipe only works on the CentOS Metaflows AMI from the AWS Marketplace.'
 end
