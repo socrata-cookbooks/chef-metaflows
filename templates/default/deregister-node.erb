@@ -21,13 +21,13 @@ fi
 chmod +x /tmp/md5pass
 
 while [ "$loggedin" != 1 ];do
-    email=<%= @email %>
-    password=<%= @pasword %>
+    email="<%= @email %>"
+    password="<%= @password %>"
     user=`echo $email| cut -f1 -d\@`
     dom=`echo $email| cut -f2 -d\@`
     SALT=`echo -n "The seven words you can't say on television: ... $password" |md5sum`
     ENCR=`/tmp/md5pass $password $SALT|head -1`
-    wget "https://nsm.metaflows.com/perl/getconf.pl?action=getsensors&p=$ENCR&m=$email" -O sensors.tmp -q 
+    wget "https://nsm.metaflows.com/perl/getconf.pl?action=getsensors&p=$ENCR&m=$email" -O sensors.tmp -q
     res1=$?
     res2=`head -1 sensors.tmp | awk '{print $1}'`;
     rm -f sensors.tmp
@@ -55,4 +55,3 @@ while [ "$loggedin" != 1 ];do
         echo "Login failed, retrying..."
     fi
 done
-
