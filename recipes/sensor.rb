@@ -59,7 +59,7 @@ if node['platform'] == 'centos'
     action :enable
   end
 
-  creds = data_bag_item('credentials', 'metaflows')
+  creds = Chef::EncryptedDataBagItem.load('credentials', 'metaflows')
 
   template '/etc/rc0.d/K01delete-metaflows-sensor' do
     source 'deregister-node.erb'
@@ -69,6 +69,6 @@ if node['platform'] == 'centos'
     variables password: creds['password'],
               email: creds['email']
   end
-else 
+else
   warn 'The sensor recipe only works on the CentOS Metaflows AMI from the AWS Marketplace.'
 end
