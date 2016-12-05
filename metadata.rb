@@ -4,10 +4,12 @@ maintainer_email 'sysadmin@socrata.com'
 license          'All rights reserved'
 description      'Installs/Configures chef-metaflows'
 long_description 'Installs/Configures chef-metaflows'
-version          '0.3.2'
+version          '0.4.0'
 
 supports 'ubuntu'
 supports 'centos'
 
 depends 'runit'
+depends 'yum-chef'
+depends 'sshd'
 depends 'socrata_configuration'

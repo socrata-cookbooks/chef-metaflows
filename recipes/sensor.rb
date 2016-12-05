@@ -1,5 +1,4 @@
-# install and run the metaflows sensor/collector
-include_recipe 'runit'
+include_recipe "#{cookbook_name}::sensor_base"
 
 if node['platform'] == 'centos'
   package 'expect'
