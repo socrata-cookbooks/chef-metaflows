@@ -1,3 +1,7 @@
+# 0.5.0
+
+- Install a recent Ruby and the aws-sdk gem
+
 # 0.4.0
 
 - Add a recipe for Metaflows base AMI configuration
