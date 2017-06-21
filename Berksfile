@@ -1,4 +1,6 @@
-source "https://supermarket.chef.io"
+# encoding: utf-8
+# frozen_string_literal: true
+
+source artifactory: 'https://repo.socrata.com/artifactory/api/chef/chef'
 
 metadata
-cookbook 'socrata_configuration', git: 'git@github.com:socrata-cookbooks/socrata_configuration.git'
