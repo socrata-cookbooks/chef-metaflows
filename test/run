@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+chef exec bundle install
+chef exec rspec
+chef exec cookstyle
+chef exec microwave test -d always
+
+echo "Congratulations! All tests passed."
