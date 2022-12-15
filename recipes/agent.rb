@@ -6,7 +6,8 @@
 
 include_recipe 'runit'
 
-package 'nmap'
+package 'ncat'
+package 'tcpdump'
 
 if node['metaflows'] && node['metaflows']['sensor_ip']
   runit_service 'metaflows' do 
