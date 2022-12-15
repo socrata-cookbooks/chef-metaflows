@@ -1,6 +1,5 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-source artifactory: 'https://repo.socrata.com/artifactory/api/chef/chef'
-
-metadata
+require 'open-uri'
+instance_eval(URI.open('https://raw.githubusercontent.com/socrata-cookbooks/' \
+                   'shared/main/files/Berksfile').read)

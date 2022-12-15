@@ -1,38 +1,32 @@
----
 driver:
-  name: ec2
+  pull_platform_image: false
+  chef_image: cincproject/cinc
 
 provisioner:
-  name: chef_zero
-  require_chef_omnibus: 11.16.4
+  name: dokken
+  product_name: cinc
+  chef_binary: /opt/cinc/bin/cinc-client
+
+transport:
+  name: dokken
+
+verifier:
+  name: inspec
 
 platforms:
-  - name: ubuntu-14.04
+  - name: ubuntu-20.04-fips-chef-17
     driver:
-      image_id: ami-3606c456
-    transport:
-      username: ubuntu
-  - name: centos-6.4
-    driver:
-      name: ec2
-      region: us-west-2
-      aws_ssh_key_id: shared-bootstrap
-      instance_type: m3.medium
-      image_id: ami-c5cf03a5
-      tags: 
-        Name: metaflows-kitchen
-    transport:
-      username: metaflows
-      ssh_key: ~/.ssh/shared-ssh-bootstrap
+      chef_version: 17
+      image: repository.socrata/base-focal-fips
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN rm -f /usr/sbin/policy-rc.d
+        - RUN DEBIAN_FRONTEND=noninteractive apt-get -y update
+        - RUN DEBIAN_FRONTEND=noninteractive apt-get -y install systemd iproute2
 
 suites:
-  - name: sensor
-    user: metaflows
-    run_list:
-      - recipe[chef-metaflows::sensor]
-
   - name: agent
-    run_list:
+    runlist:
       - recipe[chef-metaflows::agent]
     attributes:
       metaflows:

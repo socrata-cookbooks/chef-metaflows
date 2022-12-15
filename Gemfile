@@ -1,19 +1,38 @@
-source 'https://rubygems.org'
+# frozen_string_literal: true
 
-gem 'berkshelf'
+path_sep = RUBY_PLATFORM.match?(/mswin|mingw|windows/) ? ';' : ':'
+chef_bin = ENV['PATH'].split(path_sep).first
 
-# Uncomment these lines if you want to live on the Edge:
-#
-# group :development do
-#   gem "berkshelf", github: "berkshelf/berkshelf"
-#   gem "vagrant", github: "mitchellh/vagrant", tag: "v1.6.3"
-# end
-#
-# group :plugins do
-#   gem "vagrant-berkshelf", github: "berkshelf/vagrant-berkshelf"
-#   gem "vagrant-omnibus", github: "schisamo/vagrant-omnibus"
-# end
+unless chef_bin.end_with?('/chef-workstation/bin', '/cinc-workstation/bin')
+  raise('This cookbook requires Chef Workstation or Cinc Workstation')
+end
 
-gem 'test-kitchen'
-gem 'kitchen-vagrant'
-gem 'kitchen-ec2'
+source 'https://repo.socrata.com/artifactory/api/gems/rubygems-virtual'
+
+gem 'kitchen-microwave', path: '/home/ubuntu/kitchen-microwave'
+
+addon_gems = {
+  'chefstyle' => nil,
+  'cookstyle' => nil,
+  'rubocop' => nil,
+  # 'strings' => nil,
+  # 'unicode-display_width' => nil,
+  'test-kitchen' => nil,
+  # 'kitchen-microwave' => 'nil',
+  'simplecov-console' => nil,
+  'chefspec' => nil,
+}
+
+File.read("#{chef_bin}/chef").lines.each do |line|
+  next unless line.strip.start_with?('gem ')
+
+  name, _, version = line.split('"')[1..3]
+
+  next if addon_gems.key?(name)
+
+  gem name, version
+end
+
+addon_gems.each do |name, version|
+  gem name, version
+end
