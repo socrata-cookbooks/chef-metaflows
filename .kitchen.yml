@@ -26,7 +26,7 @@ platforms:
 
 suites:
   - name: agent
-    runlist:
+    run_list:
       - recipe[chef-metaflows::agent]
     attributes:
       metaflows:
