@@ -10,6 +10,4 @@ describe 'Metaflows agent' do
       expect(its(:content) { should include('exec 2>&1') })
     end
   end
-
 end
-

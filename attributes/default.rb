@@ -1,4 +1,4 @@
-default['metaflows']['clortho_bucket'] 
+default['metaflows']['clortho_bucket']
 default['metaflows']['clortho_path']
 default['metaflows']['metaflows_clortho_file']
 
