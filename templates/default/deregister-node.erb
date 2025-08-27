@@ -36,7 +36,8 @@ while [ "$loggedin" != 1 ];do
         loggedin=1
 		SALT=`echo -n "The seven words you can't say on television: ... $password" |md5sum`
 		ENCR=`/tmp/md5pass $password $SALT|head -1`
-		PIPV4=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
+        TOKEN=`curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
+		PIPV4=`curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4`
 		rm /tmp/mfd.reg 2> /dev/null
 		echo type: deletesensor >> /tmp/mfd.reg
 		echo email: $email >> /tmp/mfd.reg

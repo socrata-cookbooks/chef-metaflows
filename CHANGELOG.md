@@ -1,3 +1,7 @@
+# 0.5.2
+
+- switch metadata calls to imdsv2
+
 # 0.5.0
 
 - Install a recent Ruby and the aws-sdk gem
